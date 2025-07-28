@@ -17,7 +17,14 @@ export default function Hero({ title, paragraphs, cta }: Props) {
       </div>
       {cta && (
         <div className="mt-8">
-          <Link href={cta.href} className="btn-outline inline-block px-6 py-2">{cta.label}</Link>
+          <Link href={cta.href} className="inline-flex items-center justify-center
+    rounded-xl border border-white/30
+    px-7 py-3 text-[15px] font-semibold uppercase tracking-wide
+    text-white/90 bg-transparent
+    shadow-[inset_0_0_0_1px_rgba(255,255,255,0.06)]
+    hover:text-white hover:border-white/50 hover:bg-white/5
+    focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/20
+    transition">{cta.label}</Link>
         </div>
       )}
     </section>

@@ -21,7 +21,7 @@ export default async function HomePage() {
       <Hero
         title="Hi, I’m Ashutosh"
         paragraphs={[
-          'Lorem ipsum dolor sit amet, consectetur ridianit eiusmod ligula eget aiiquet.',
+          'I work as a software engineer fulltime.',
           'Right now, I’m focused on building a Term Extraction Engine (TEE) to automate knowledge extraction.',
         ]}
         cta={{ href: '/lab', label: 'LAB ENTRIES' }}
@@ -41,22 +41,24 @@ export default async function HomePage() {
       <hr className="my-8 border-gray-800" />
 
       {/* Lab Journal Preview */}
-      <Section title="Lab Journal" subtitle="Latest notes and experiments">
-        {latest.length ? (
-          <ul className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-            {latest.map((post) => (
-              <li key={post.slug} className="min-w-0">
-                <LabEntryCard post={post} />
-              </li>
-            ))}
-          </ul>
-        ) : (
-          <p className="text-gray-400">No entries yet — coming soon.</p>
-        )}
-      </Section>
+      
+<div className="full-bleed">
+  <div className="full-bleed-inner  max-w-7xl mx-auto px-4 py-12">
+    <Section title="Lab Journal" subtitle="Latest notes and experiments">
+      <ul className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        {latest.map((post) => (
+          <li key={post.slug} className="min-w-0">
+            <LabEntryCard post={post} showDescription={false} />
+          </li>
+        ))}
+      </ul>
+    </Section>
+  </div>
+</div>
+
 
       {/* Divider */}
-      <hr className="my-8 border-gray-800" />
+      <hr className="full-bleed my-8 border-gray-800" />
 
       {/* Projects */}
       <Section title="Projects">

@@ -15,16 +15,18 @@ export async function generateStaticParams() {
 
 // Dynamic SEO per entry
 export async function generateMetadata({
-  params,
+  params: rawParams,
 }: {
   params: { slug: string };
 }) {
+  // Await the params (this resolves any promise-like behavior)
+  const { slug } = await Promise.resolve(rawParams);
+
   try {
-    const post = await getPostBySlug(params.slug);
+    const post = await getPostBySlug(slug);
     const title = post.title;
     const description = post.description ?? post.title;
-    const url = `http://localhost:3000//lab/${params.slug}`;
-
+    const url = `http://localhost:3000/lab/${slug}`;
     const images = post.ogImage ? [{ url: post.ogImage }] : [];
 
     return {
@@ -36,7 +38,7 @@ export async function generateMetadata({
         url,
         title,
         description,
-        images, // empty array if none
+        images,
       },
       twitter: {
         card: images.length ? 'summary_large_image' : 'summary',
