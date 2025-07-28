@@ -51,3 +51,88 @@ export async function generateMetadata({
   }
 }
 
+export default async function LabEntryPage({
+  params,
+}: {
+  params: { slug: string };
+}) {
+  let post: PostData;
+  try {
+    post = await getPostBySlug(params.slug);
+  } catch {
+    return notFound();
+  }
+
+  const { previous, next } = await getAdjacentPosts(params.slug);
+
+  return (
+    <main className="mx-auto max-w-3xl px-4 py-12">
+      <article className="prose prose-invert">
+        {/* Entry Header */}
+        <header className="not-prose mb-6">
+          <h1 className="text-3xl font-semibold text-white">{post.title}</h1>
+
+          <div className="mt-2 text-sm text-gray-400 flex flex-wrap items-center gap-x-2">
+            <time dateTime={post.date}>{formatDate(post.date)}</time>
+            <span aria-hidden="true">•</span>
+            <span>{post.readTime} min read</span>
+            <span aria-hidden="true">•</span>
+            <span>By {post.author}</span>
+          </div>
+
+          {post.tags?.length ? (
+            <div className="mt-3 flex flex-wrap gap-2">
+              {post.tags.map((t) => (
+                <span
+                  key={t}
+                  className="inline-flex items-center rounded border border-gray-700/70 bg-surface px-2 py-0.5 text-xs text-gray-300"
+                >
+                  {t}
+                </span>
+              ))}
+            </div>
+          ) : null}
+        </header>
+
+        {/* Body */}
+        <div dangerouslySetInnerHTML={{ __html: post.contentHTML }} />
+      </article>
+
+      {/* Adjacent navigation */}
+      <nav className="mt-10 flex justify-between text-sm text-gray-300">
+        {previous ? (
+          <Link
+            href={`/lab/${previous.slug}`}
+            className="hover:text-white transition-colors"
+          >
+            ← {previous.title}
+          </Link>
+        ) : (
+          <span />
+        )}
+
+        {next ? (
+          <Link
+            href={`/lab/${next.slug}`}
+            className="hover:text-white transition-colors"
+          >
+            {next.title} →
+          </Link>
+        ) : (
+          <span />
+        )}
+      </nav>
+    </main>
+  );
+}
+
+// Utils
+function formatDate(iso: string) {
+  const d = new Date(iso);
+  // Use a consistent, readable format (you can localize if needed)
+  return d.toLocaleDateString(undefined, {
+    year: 'numeric',
+    month: 'short',
+    day: '2-digit',
+  });
+}
