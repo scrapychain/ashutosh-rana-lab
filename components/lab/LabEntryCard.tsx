@@ -1,46 +1,64 @@
-// components/lab/LabEntryCard.tsx
 import Link from 'next/link';
 import type { PostMeta } from '@/libs/posts';
+import TagPill from './TagPill';
 
-type Props = { post: PostMeta };
+type Props = { post: PostMeta; showDescription?: boolean };
 
-export default function LabEntryCard({ post }: Props) {
-  const date = new Date(post.date);
-  const formatted = date.toLocaleDateString(undefined, {
+export default function LabEntryCard({ post, showDescription = true }: Props) {
+  const formatted = new Date(post.date).toLocaleDateString(undefined, {
     year: 'numeric',
     month: 'short',
     day: '2-digit',
   });
 
   return (
-    <article className="card">
-      <header className="flex items-baseline justify-between gap-2">
-        <time className="text-xs text-gray-400" dateTime={post.date}>
-          {formatted}
-        </time>
-        <span className="text-xs text-gray-400">
-          {post.readTime} min read
-        </span>
-      </header>
+    <Link
+      href={`/lab/${post.slug}`}
+      aria-label={`Read: ${post.title}`}
+      className="block focus:outline-none focus-visible:ring-2 focus-visible:ring-gray-500 rounded-lg"
+    >
+      <article
+        className="
+          card group rounded-lg p-4 
+          border-gray-800 bg-surface/70
+          hover:bg-surface/90 hover:border-gray-600
+          transition-colors
+        "
+      >
+        {/* Meta row */}
+        <div className="flex items-center justify-between text-xs text-gray-400">
+          <time dateTime={post.date}>{formatted}</time>
+          {post.readTime ? <span>{post.readTime} min read</span> : null}
+        </div>
 
-      <h2 className="mt-2 text-lg font-semibold">
-        <Link href={`/lab/${post.slug}`} className="hover:underline">
+        {/* Title */}
+        <h3
+          className="
+            mt-2 text-[17px] font-semibold text-gray-100
+            group-hover:text-white
+          "
+        >
           {post.title}
-        </Link>
-      </h2>
+        </h3>
 
-      {post.tags?.length ? (
-        <ul className="mt-3 flex flex-wrap gap-2">
-          {post.tags.map((t) => (
-            <li
-              key={t}
-              className="text-xs border border-gray-700/70 rounded px-2 py-0.5 text-gray-300"
-            >
-              {t}
-            </li>
-          ))}
-        </ul>
-      ) : null}
-    </article>
+        {/* Optional description */}
+        {showDescription && post.description ? (
+          <p className="mt-2 text-sm text-gray-400 line-clamp-2">
+            {post.description}
+          </p>
+        ) : null}
+
+        {/* Tags */}
+        {post.tags?.length ? (
+          <ul className="mt-3 flex flex-wrap gap-2">
+            {post.tags.map((t) => (
+              <li key={t}>
+                <TagPill label={t} />
+              </li>
+            ))}
+          </ul>
+        ) : null}
+      </article>
+    </Link>
   );
 }
