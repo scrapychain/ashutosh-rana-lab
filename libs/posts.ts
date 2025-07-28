@@ -134,3 +134,22 @@ const loadAll = cache(async (): Promise<Loaded[]> => {
     .filter(({ meta }) => (IS_PROD ? !meta.draft : true))
     .sort((a, b) => (a.meta.date < b.meta.date ? 1 : -1));
 });
+
+
+/** All post metadata, newest → oldest */
+export async function getAllPostsMeta(): Promise<PostMeta[]> {
+  const items = await loadAll();
+  return items.map((x) => x.meta);
+}
+
+/** Single post by slug: HTML + metadata */
+export async function getPostBySlug(slug: string): Promise<PostData> {
+  const items = await loadAll();
+  const found = items.find((x) => x.meta.slug === slug);
+  if (!found) throw new Error(`Post not found: ${slug}`);
+  if (IS_PROD && found.meta.draft) throw new Error('Post not found');
+
+  const processed = await remark().use(gfm).use(remarkHtml).process(found.content);
+  const contentHTML = processed.toString();
+  return { ...found.meta, contentHTML };
+}
