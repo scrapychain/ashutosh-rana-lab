@@ -153,3 +153,42 @@ export async function getPostBySlug(slug: string): Promise<PostData> {
   const contentHTML = processed.toString();
   return { ...found.meta, contentHTML };
 }
+
+/** Previous / Next neighbors relative to a slug */
+export async function getAdjacentPosts(slug: string): Promise<{
+  previous: PostMeta | null;
+  next: PostMeta | null;
+}> {
+  const metas = await getAllPostsMeta();
+  const i = metas.findIndex((p) => p.slug === slug);
+  return {
+    previous: i < metas.length - 1 ? metas[i + 1] : null,
+    next: i > 0 ? metas[i - 1] : null,
+  };
+}
+
+/** All slugs for static generation */
+export async function getAllSlugs(): Promise<string[]> {
+  const metas = await getAllPostsMeta();
+  return metas.map((m) => m.slug);
+}
+
+/** Latest N posts (default 3) for previews */
+export async function getLatestPosts(limit = 3): Promise<PostMeta[]> {
+  const metas = await getAllPostsMeta();
+  return metas.slice(0, Math.max(0, limit));
+}
+
+/** Filter posts by tag */
+export async function getPostsByTag(tag: string): Promise<PostMeta[]> {
+  const metas = await getAllPostsMeta();
+  return metas.filter((m) => m.tags?.includes(tag.toLowerCase()));
+}
+
+/** Unique sorted tag list */
+export async function getAllTags(): Promise<string[]> {
+  const metas = await getAllPostsMeta();
+  const set = new Set<string>();
+  metas.forEach((m) => m.tags?.forEach((t) => set.add(t)));
+  return Array.from(set).sort((a, b) => a.localeCompare(b));
+}
