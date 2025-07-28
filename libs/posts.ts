@@ -66,3 +66,71 @@ function normalizeTags(tags: unknown): string[] | undefined {
     .map((s) => s.toLowerCase());
   return t.length ? Array.from(new Set(t)) : undefined;
 }
+
+// -------------------------
+// Core loader (cached)
+// -------------------------
+type Loaded = { meta: PostMeta; content: string };
+
+const loadAll = cache(async (): Promise<Loaded[]> => {
+  const files = await fs.readdir(POSTS_DIR);
+  const mdFiles = files.filter((f) => f.endsWith('.md'));
+
+  const items = await Promise.all(
+    mdFiles.map(async (file) => {
+      const slug = file.replace(/\.md$/, '');
+      const raw = await fs.readFile(path.join(POSTS_DIR, file), 'utf8');
+      const { data, content } = matter(raw);
+
+      // Required fields
+      const title = typeof data.title === 'string' ? data.title.trim() : '';
+      const date = typeof data.date === 'string' ? data.date : '';
+      if (!title) throw new Error(`Missing/invalid "title" in ${slug}`);
+      if (!date || Number.isNaN(Date.parse(date))) {
+        throw new Error(`Missing/invalid "date" in ${slug}`);
+      }
+
+      // Optional fields + normalization
+      const description =
+        typeof data.description === 'string' ? data.description.trim() : undefined;
+      const author =
+        typeof data.author === 'string' && data.author.trim()
+          ? data.author.trim()
+          : DEFAULT_AUTHOR;
+      const tags = Array.isArray(data.tags) ? normalizeTags(data.tags) : undefined;
+      const draft = typeof data.draft === 'boolean' ? data.draft : false;
+     const ogImage =
+  typeof data.ogImage === 'string' && data.ogImage?.trim()
+    ? data.ogImage.trim()
+    : undefined;
+      // Computed fields
+      const wordCount = computeWordCount(content);
+      const readTime = computeReadTime(
+  wordCount,
+  typeof data.readTime === 'string' || typeof data.readTime === 'number'
+    ? data.readTime
+    : undefined
+);
+
+
+      const meta: PostMeta = {
+        slug,
+        title,
+        date: toISO(date),
+        description,
+        author,
+        tags,
+        draft,
+        ogImage,     // optional
+        readTime,
+        wordCount,
+      };
+
+      return { meta, content };
+    })
+  );
+
+  return items
+    .filter(({ meta }) => (IS_PROD ? !meta.draft : true))
+    .sort((a, b) => (a.meta.date < b.meta.date ? 1 : -1));
+});
