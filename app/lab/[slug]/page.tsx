@@ -136,3 +136,41 @@ function formatDate(iso: string) {
     day: '2-digit',
   });
 }
+
+function buildArticleJsonLd({
+  url,
+  title,
+  description,
+  datePublished,
+  author,
+  wordCount,
+  tags,
+  ogImage,
+}: {
+  url: string;
+  title: string;
+  description: string;
+  datePublished: string;
+  author: string;
+  wordCount: number;
+  tags: string[];
+  ogImage?: string;
+}) {
+  const payload: Record<string, unknown> = {
+    '@context': 'https://schema.org',
+    '@type': 'Article',
+    mainEntityOfPage: url,
+    headline: title,
+    description,
+    datePublished,
+    dateModified: datePublished,
+    author: { '@type': 'Person', name: author },
+    wordCount,
+    keywords: tags.join(', '),
+    url,
+  };
+  if (ogImage) {
+    payload.image = [ogImage];
+  }
+  return JSON.stringify(payload);
+}
