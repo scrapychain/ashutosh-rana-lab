@@ -4,7 +4,9 @@ import LabEntryCard from '@/components/lab/LabEntryCard'
 import Hero from '@/components/ui/Hero'
 import Section from '@/components/ui/Section'
 import SocialRow from '@/components/ui/SocialRow'
-import  ProjectRow from '@/components/projects/ProjectRow'
+import ProjectRow from '@/components/projects/ProjectRow';
+import { getFeaturedProjects } from '@/libs/projects';
+
 
 export const metadata = {
   title: 'Ashutosh Lab — Builder\'s Journal',
@@ -61,13 +63,21 @@ export default async function HomePage() {
       <hr className="full-bleed my-8 border-gray-800" />
 
       {/* Projects */}
-      <Section title="Projects">
-        <div className="space-y-4">
-          <ProjectRow name="TEE" status="In Progress" progress={68} />
-          <ProjectRow name="ProofOfTerms" status="Concept" progress={24} />
-          <ProjectRow name="ScrapyChain" status="Shipped" progress={100} />
-        </div>
-      </Section>
+  <Section title="Projects">
+  <div className="space-y-4">
+    {getFeaturedProjects(3).map((p) => (
+      <ProjectRow key={p.slug} project={p} />
+    ))}
+  </div>
+
+  <div className="mt-6">
+    <Link href="/projects" className="text-sm text-gray-300 hover:text-white underline">
+      View all projects →
+    </Link>
+  </div>
+</Section>
+
+
 
       {/* Divider */}
       <hr className="my-8 border-gray-800" />

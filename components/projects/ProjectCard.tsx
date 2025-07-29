@@ -1,21 +1,10 @@
-// components/projects/ProjectRow.tsx
-import Link from 'next/link';
-import type { Project } from '@/libs/projects';
+import Link from 'next/link'
+import type { Project } from '@/libs/projects'
 
-type Props = {
-  project: Project;
-  showTags?: boolean;
-  showProgress?: boolean;
-  className?: string;
-};
+type CardProps = { project: Project; className?: string }
 
-export default function ProjectRow({
-  project,
-  showTags = true,
-  showProgress = true,
-  className = '',
-}: Props) {
-  const progress = clamp(project.progress ?? 0, 0, 100);
+export default function ProjectCard({ project, className = '' }: CardProps) {
+  const progress = clamp(project.progress ?? 0, 0, 100)
 
   return (
     <article
@@ -24,7 +13,7 @@ export default function ProjectRow({
     >
       {/* Title + status */}
       <header className="flex items-start justify-between gap-3">
-        <h3 id={`project-${project.slug}-title`} className="text-base font-semibold text-white">
+        <h3 id={`project-${project.slug}-title`} className="text-lg font-semibold text-white">
           {project.title}
         </h3>
         <StatusBadge status={project.status} />
@@ -33,14 +22,11 @@ export default function ProjectRow({
       {/* Description */}
       <p className="mt-2 text-sm text-gray-300">{project.description}</p>
 
-      {/* Tags (optional) */}
-      {showTags && project.tags?.length ? (
+      {/* Tags */}
+      {project.tags?.length ? (
         <ul className="mt-3 flex flex-wrap gap-2">
           {project.tags.map((t) => (
-            <li
-              key={t}
-              className="text-xs border border-gray-700/70 rounded px-2 py-0.5 text-gray-300"
-            >
+            <li key={t} className="text-xs border border-gray-700/70 rounded px-2 py-0.5 text-gray-300">
               {t}
             </li>
           ))}
@@ -63,32 +49,26 @@ export default function ProjectRow({
           <span className="text-sm text-gray-500">Private / No repo</span>
         )}
 
-        {showProgress && (
-          <div className="ml-4 hidden sm:block w-40 h-2 rounded bg-gray-800" aria-hidden>
-            <div className="h-2 rounded bg-gray-600" style={{ width: `${progress}%` }} />
-          </div>
-        )}
+        {/* Progress bar (hidden on very small viewports) */}
+        <div className="ml-4 hidden sm:block w-40 h-2 rounded bg-gray-800" aria-hidden>
+          <div className="h-2 rounded bg-gray-600" style={{ width: `${progress}%` }} />
+        </div>
       </footer>
     </article>
-  );
+  )
 }
 
 function StatusBadge({ status }: { status: Project['status'] }) {
   const dot =
-    status === 'Shipped'
-      ? 'bg-green-400'
-      : status === 'In Progress'
-      ? 'bg-blue-400'
-      : 'bg-gray-400';
-
+    status === 'Shipped' ? 'bg-green-400' : status === 'In Progress' ? 'bg-blue-400' : 'bg-gray-400'
   return (
     <span className="inline-flex items-center rounded-full border border-gray-700/60 px-2 py-0.5 text-xs text-gray-300">
       <span className={`mr-2 inline-block h-2.5 w-2.5 rounded-full ${dot}`} />
       {status}
     </span>
-  );
+  )
 }
 
 function clamp(n: number, min: number, max: number) {
-  return Math.min(max, Math.max(min, n));
+  return Math.min(max, Math.max(min, n))
 }
