@@ -171,12 +171,6 @@ export default function VisionPage() {
             </p>
             <div className="mt-4 flex flex-wrap gap-3">
               <Link href="/lab" className="btn-outline">Read the Lab</Link>
-              <Link
-                href="/contact"
-                className="text-sm text-gray-300 underline-offset-2 hover:text-white hover:underline"
-              >
-                Contact
-              </Link>
             </div>
           </div>
         </section>

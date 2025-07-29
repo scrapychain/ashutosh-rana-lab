@@ -3,7 +3,6 @@ const links = [
   { href: '/lab', label: 'Lab' },
   { href: '/projects', label: 'Projects' },
   { href: '/vision', label: 'Vision' },
-  { href: '/contact', label: 'Contact' },
 ]
 
 export default function Header() {

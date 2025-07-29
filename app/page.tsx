@@ -78,27 +78,6 @@ export default async function HomePage() {
 </Section>
 
 
-
-      {/* Divider */}
-      <hr className="my-8 border-gray-800" />
-
-      {/* Contact (minimal per wireframe) */}
-      <Section title="Contact">
-        <form className="grid gap-4 sm:grid-cols-2">
-          <label className="sr-only" htmlFor="name">Name</label>
-          <input id="name" name="name" placeholder="Name" className="col-span-1 rounded border border-gray-700 bg-surface px-3 py-2 text-gray-100 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-gray-600" />
-
-          <label className="sr-only" htmlFor="email">Email</label>
-          <input id="email" name="email" type="email" placeholder="Email" className="col-span-1 rounded border border-gray-700 bg-surface px-3 py-2 text-gray-100 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-gray-600" />
-
-          <label className="sr-only" htmlFor="message">Message</label>
-          <textarea id="message" name="message" placeholder="Message" rows={4} className="sm:col-span-2 rounded border border-gray-700 bg-surface px-3 py-2 text-gray-100 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-gray-600" />
-
-          <div className="sm:col-span-2">
-            <button type="submit" className="btn-outline">Send</button>
-          </div>
-        </form>
-      </Section>
     </main>
   )
 }
