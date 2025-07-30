@@ -7,6 +7,35 @@ export const metadata = {
     "A long-term plan to unify AI and blockchain into a single, verifiable intelligence fabric. Near term: build TEE and integrate it into Proof of Terms.",
 };
 
+/* ---------------------------- protocol data ---------------------------- */
+/* Text matches the diagram cards */
+const PROTOCOL_LAYERS = [
+  {
+    title: "Application Layer",
+    description: "(Decentralized Apps, Browsers, AI Agents)",
+  },
+  {
+    title: "AI Protocol Layer",
+    description: "(Autonomous Request Handling, Packetization, Optimization)",
+  },
+  {
+    title: "Self-Learning Network Layer",
+    description: "(Agent-based TCP/IP Routing, Traffic Learning)",
+  },
+  {
+    title: "Blockchain Trust Layer",
+    description: "(Secure Identity, Provenance, Consensus)",
+  },
+  {
+    title: "Zero-Knowledge Privacy Layer",
+    description: "(Proofs for Packet Handling, Identity, Metadata)",
+  },
+  {
+    title: "Physical Network Layer",
+    description: "(Hardware, Fiber, Spectrum, Edge Devices)",
+  },
+];
+
 export default function VisionPage() {
   return (
     <main className="mx-auto max-w-3xl px-4 py-16">
@@ -79,38 +108,19 @@ export default function VisionPage() {
 
         <Divider />
 
-        {/* Protocol and agents */}
+        {/* Protocol stack — matches the diagram text */}
         <section>
-          <SectionHeader label="Protocols">Decentralized Agentic Networks</SectionHeader>
-          <p>
-            I keep asking a simple question. What if core internet protocols behaved like
-            small, cooperating agents. They would route data, learn from behavior, recover from
-            failure, and publish a clear record of what changed and why the result can be trusted.
+          <SectionHeader label="Protocols">
+            Agentic Internet Architecture (Concept)
+          </SectionHeader>
+          <p className="text-gray-300 mt-2">
+            A layered view of how AI and blockchain operate as one fabric. Each layer focuses on a
+            single responsibility and composes with the others.
           </p>
 
-          <div className="not-prose mt-4 grid gap-3 sm:grid-cols-2">
-            {[
-              {
-                h: "Identity and Attestation",
-                b: "Keys or DIDs with signed capability grants. Agents prove who they are and what they may do.",
-              },
-              {
-                h: "Provenance Graphs",
-                b: "Content addressed DAGs of inputs, transforms, and outputs. Easy to diff and audit.",
-              },
-              {
-                h: "Selective Disclosure",
-                b: "Share proofs without exposing raw data. Use ZK or TEEs where needed.",
-              },
-              {
-                h: "Flexible Settlement",
-                b: "Commit on chain when appropriate, otherwise signed off chain logs. Keep integrity, avoid friction.",
-              },
-            ].map((c) => (
-              <div key={c.h} className="card p-4">
-                <h3 className="text-sm font-semibold text-white">{c.h}</h3>
-                <p className="mt-1 text-sm text-gray-300">{c.b}</p>
-              </div>
+          <div className="not-prose mt-6 space-y-5">
+            {PROTOCOL_LAYERS.map((l) => (
+              <LayerCard key={l.title} title={l.title} description={l.description} />
             ))}
           </div>
         </section>
@@ -180,6 +190,24 @@ export default function VisionPage() {
 }
 
 /* ---------------------------- helpers ---------------------------- */
+
+function LayerCard({ title, description }) {
+  return (
+    <article
+      className="rounded-xl border border-gray-700/70 bg-surface px-4 py-6 shadow-sm"
+      aria-labelledby={slugify(title)}
+    >
+      <h3 id={slugify(title)} className="text-center text-lg font-semibold text-white">
+        {title}
+      </h3>
+      <p className="mt-1 text-center text-sm text-gray-300">{description}</p>
+    </article>
+  );
+}
+
+function slugify(s) {
+  return String(s).toLowerCase().replace(/[^a-z0-9]+/g, "-");
+}
 
 function Overline({ children }) {
   return <p className="text-xs tracking-widest uppercase text-gray-400">{children}</p>;

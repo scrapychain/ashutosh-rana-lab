@@ -15,12 +15,12 @@ export async function generateStaticParams() {
 
 // Dynamic SEO per entry
 export async function generateMetadata({
-  params: rawParams,
+  params,
 }: {
-  params: { slug: string };
+  params: Promise<{ slug: string }>;
 }) {
   // Await the params (this resolves any promise-like behavior)
-  const { slug } = await Promise.resolve(rawParams);
+  const { slug } = await params;
 
   try {
     const post = await getPostBySlug(slug);
@@ -56,16 +56,17 @@ export async function generateMetadata({
 export default async function LabEntryPage({
   params,
 }: {
-  params: { slug: string };
+   params: Promise<{ slug: string }>;
 }) {
+   const { slug } = await params; 
   let post: PostData;
   try {
-    post = await getPostBySlug(params.slug);
+    post = await getPostBySlug(slug);
   } catch {
     return notFound();
   }
 
-  const { previous, next } = await getAdjacentPosts(params.slug);
+  const { previous, next } = await getAdjacentPosts(slug);
 
   return (
     <main className="mx-auto max-w-3xl px-4 py-12">
@@ -139,7 +140,7 @@ function formatDate(iso: string) {
   });
 }
 
-function buildArticleJsonLd({
+/*function buildArticleJsonLd({
   url,
   title,
   description,
@@ -175,4 +176,4 @@ function buildArticleJsonLd({
     payload.image = [ogImage];
   }
   return JSON.stringify(payload);
-}
+}*/
