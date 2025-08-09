@@ -30,8 +30,17 @@ export type PostData = PostMeta & {
 
 // Helper functions
 
-function toISO(date: string): string{
-    return new Date(date).toISOString();
+
+function normalizeFrontmatterDate(date: string): string {
+  // If it's already YYYY-MM-DD, keep it verbatim (no timezone math).
+  if (/^\d{4}-\d{2}-\d{2}$/.test(date)) return date;
+
+  // Otherwise, parse and collapse to YYYY-MM-DD to avoid TZ shifts.
+  const d = new Date(date);
+  if (Number.isNaN(d.getTime())) {
+    throw new Error(`Invalid date: ${date}`);
+  }
+  return d.toISOString().slice(0, 10); // keep only the date part
 }
 
 function computeWordCount(content: string): number {
@@ -116,7 +125,7 @@ const loadAll = cache(async (): Promise<Loaded[]> => {
       const meta: PostMeta = {
         slug,
         title,
-        date: toISO(date),
+        date: normalizeFrontmatterDate(date),
         description,
         author,
         tags,

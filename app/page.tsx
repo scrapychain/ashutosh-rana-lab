@@ -9,7 +9,7 @@ import { getFeaturedProjects } from '@/libs/projects';
 
 
 export const metadata = {
-  title: 'Ashutosh Lab — Builder\'s Journal',
+  title: 'Ashutosh Rana\'s Lab — Builder\'s Journal',
   description:
     'A dark, minimal lab journal exploring AI × Blockchain × Education. Latest experiments, notes, and projects.',
 }

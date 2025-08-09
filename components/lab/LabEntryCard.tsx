@@ -5,11 +5,12 @@ import TagPill from './TagPill';
 type Props = { post: PostMeta; showDescription?: boolean };
 
 export default function LabEntryCard({ post, showDescription = true }: Props) {
-  const formatted = new Date(post.date).toLocaleDateString(undefined, {
-    year: 'numeric',
-    month: 'short',
-    day: '2-digit',
-  });
+  const formatted = new Intl.DateTimeFormat(undefined, {
+  year: 'numeric',
+  month: 'short',
+  day: '2-digit',
+  timeZone: 'UTC',
+}).format(new Date(`${post.date}T00:00:00Z`));
 
   return (
     <Link

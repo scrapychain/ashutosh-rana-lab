@@ -67,7 +67,12 @@ export default async function LabEntryPage({
   }
 
   const { previous, next } = await getAdjacentPosts(slug);
-
+const formatted = new Intl.DateTimeFormat(undefined, {
+  year: 'numeric',
+  month: 'short',
+  day: '2-digit',
+  timeZone: 'UTC',
+}).format(new Date(`${post.date}T00:00:00Z`));
   return (
     <main className="mx-auto max-w-3xl px-4 py-12">
       <article className="prose prose-invert">
@@ -76,7 +81,7 @@ export default async function LabEntryPage({
           <h1 className="text-3xl font-semibold text-white">{post.title}</h1>
 
           <div className="mt-2 text-sm text-gray-400 flex flex-wrap items-center gap-x-2">
-            <time dateTime={post.date}>{formatDate(post.date)}</time>
+            <time dateTime={`${post.date}T00:00:00Z`}>{formatted}</time>
             <span aria-hidden="true">•</span>
             <span>{post.readTime} min read</span>
             <span aria-hidden="true">•</span>
