@@ -3,7 +3,7 @@ import ProjectRow from '@/components/projects/ProjectRow';
 import { getAllProjects } from '@/libs/projects';
 
 export const metadata = {
-  title: 'Projects — Ashutosh Lab',
+  title: 'Projects - Ashutosh Rana Lab',
   description: 'All personal and public projects: TEE, ProofOfTerms, ScrapyChain and more.',
 };
 

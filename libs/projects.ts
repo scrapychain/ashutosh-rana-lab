@@ -19,7 +19,7 @@ const PROJECTS: readonly Project[] = [
     repo: 'https://github.com/scrapychain/tee',
     tags: ['ai', 'nlp', 'pipelines'],
     status: 'In Progress',
-    progress: 68,
+    progress: 10,
   },
   {
     slug: 'proofofterms',
@@ -29,7 +29,7 @@ const PROJECTS: readonly Project[] = [
     repo: 'https://github.com/scrapychain/proof-of-terms',
     tags: ['web3', 'react'],
     status: 'Concept',
-    progress: 24,
+    progress: 0,
   },
 
 ] as const
