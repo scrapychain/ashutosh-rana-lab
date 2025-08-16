@@ -14,7 +14,7 @@ export default function ProjectsPage() {
     <main className="py-10">
       <h1 className="text-3xl font-semibold text-white mb-6">Projects</h1>
       <p className="text-gray-400 mb-6">
-        A running list of projects—some shipped, some in progress, some just ideas.
+        A running list of projects some shipped, some in progress, some just ideas.
       </p>
 
       <div className="space-y-4">
